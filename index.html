@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Clinical Frailty Scale Survey</title>
+
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#2196F3" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- idb wrapper -->
+  <script src="https://unpkg.com/idb@7/build/umd.js"></script>
+</head>
+
+<body>
+  <div class="app-container">
+    <header>
+      <h1>Clinical Frailty Scale Assessment</h1>
+      <span id="offlineIndicator" class="hidden">📴 Offline</span>
+    </header>
+
+    <main class="main-content">
+
+  <!-- SECTION 1 – BASIC DETAILS -->
+  <section id="basicDetailsSection" class="active">
+    <h2>Basic Patient Information</h2>
+    <form id="basicDetailsForm">
+      <!-- grid of inputs -->
+      <div class="grid">
+        <label>Patient MRNO <input type="number" name="mrno" required /></label>
+        <label>Age <input type="number" min="1" max="120" name="age" /></label>
+        <fieldset class="full">
+          <legend>Gender</legend>
+          <label><input type="radio" name="gender" value="Male" />
+            Male</label>
+          <label><input type="radio" name="gender" value="Female" /> Female</label>
+        </fieldset>
+        <h3>ED visit on :</h3>
+        <label>Date<input type="date" name="edVisitDate" /></label>
+        <label>Time<input type="time" step="60" name="edVisitTime" /></label>
+
+        <h2>Presenting Illness</h2>
+        <label>Presenting complaints <input type="text" name="presentingComplaints" /></label>
+        <h3>Vitals :</h3>
+        <label>BP (mmhg) <input type="text" name="bp_count" /></label>
+        <label>RR (breaths/min) <input type="number" name="rr_count" /></label>
+        <label>HR (bpm) <input type="number" name="hr_count" /></label>
+        <label>Spo2 (%) <input type="number" name="spo2_count" /></label>
+      </div>
+
+      <div class="actions">
+        <button type="button" id="nextToCfs">Next ▶</button>
+        <button type="button" id="viewSavedAssessments">📋 View Saved Assessments</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- SECTION 2 – CFS QUESTIONS -->
+  <section id="cfsSection">
+    <h2>Clinical Frailty Scale Health Questionnaire</h2>
+
+    <form id="cfsForm">
+      <fieldset class="terminally">
+        <legend>Is your patient terminally ill?</legend>
+        <label><input type="radio" name="terminally" value="1" required />Yes</label>
+        <label><input type="radio" name="terminally" value="0" required />No</label>
+      </fieldset>
+
+      <div class="badls_div" hidden>
+        <h4>Basic Activities of Daily Living (BADLs)</h4>
+        <fieldset class="badls">
+          <table>
+            <thead>
+              <tr>
+                <th>Could your patient...</th>
+                <th>
+                  No, unable to do OR can only do with help from another person
+                </th>
+                <th>Yes, without help from another person</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <legend>
+                    Dress and undress yourself (including putting on socks
+                    and shoes)?
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="dress" value="1" required />
+                </td>
+                <td>
+                  <input type="radio" name="dress" value="0" required />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>Eat?</legend>
+                </td>
+                <td>
+                  <input type="radio" name="eat" value="1" required />
+                </td>
+                <td>
+                  <input type="radio" name="eat" value="0" required />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>Walk?</legend>
+                </td>
+                <td>
+                  <input type="radio" name="walk" value="1" required />
+                </td>
+                <td>
+                  <input type="radio" name="walk" value="0" required />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>Get in and out of bed?</legend>
+                </td>
+                <td>
+                  <input type="radio" name="bed" value="1" required />
+                </td>
+                <td>
+                  <input type="radio" name="bed" value="0" required />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>Take a bath or shower?</legend>
+                </td>
+                <td>
+                  <input type="radio" name="bath" value="1" required />
+                </td>
+                <td>
+                  <input type="radio" name="bath" value="0" required />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </fieldset>
+      </div>
+
+      <div class="iadls_div" hidden>
+        <h4>Instrumental Activities of Daily Living (IADLs)</h4>
+        <fieldset class="iadls">
+          <table>
+            <thead>
+              <tr>
+                <th>Could your patient...</th>
+                <th>
+                  No, unable to do OR can only do with help from another person
+                </th>
+                <th>Yes, without help from another person</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <legend>
+                    Use the telephone including looking up numbers and
+                    dialing?
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="telephone" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="telephone" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>Go shopping for groceries or clothes?</legend>
+                </td>
+                <td>
+                  <input type="radio" name="shopping" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="shopping" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Prepare your own meals (including planning and cooking
+                    full meals)?
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="cooking" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="cooking" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Do your housework (including heavy housework)?
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="housework" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="housework" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Take your own medicine (including preparing it and taking the right dose at the right time)?
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="medicine" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="medicine" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Handle your own money (including writing cheques and paying bills)?
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="money" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="money" value="0" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </fieldset>
+      </div>
+
+      <div class="chronic_div" hidden>
+        <fieldset class="chronic_conditions">
+          <table>
+            <thead>
+              <tr>
+                <th>
+                  Has a doctor ever told your patient that they have or had
+                  chronic health conditions which are expected to last, or have
+                  already lasted, 6 months or more?
+                </th>
+                <th>Yes</th>
+                <th>No</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <legend>
+                    Emphysema, chronic bronchitis, chronic obstructive pulmonary disease (COPD), or chronic changes in
+                    lungs due to smoking
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="emphysema" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="emphysema" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    High blood pressure or hypertension
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="bp" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="bp" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Heart disease (including congestive heart failure or CHF)
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="heart_disease" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="heart_disease" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Angina (or chest pain due to heart disease), heart attack, or myocardial infarction
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="angina" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="angina" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Cancer
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="cancer" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="cancer" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Memory problem
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="memory" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="memory" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Dementia or Alzheimer's disease
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="dementia" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="dementia" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Osteoarthritis in the knee, hip or hands
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="osteoarthritis" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="osteoarthritis" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Rheumatoid or other type of arthritis
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="rheumatoid" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="rheumatoid" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Peripheral vascular disease or poor circulation in your limbs
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="peripheral_vascular" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="peripheral_vascular" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Stroke or CVA (cerebrovascular accident)
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="stroke" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="stroke" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Mini-stroke or TIA (Transient Ischemic Attack)
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="mini_stroke" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="mini_stroke" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Parkinsonism or Parkinson's disease
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="parkinsons" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="parkinsons" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Intestinal or stomach ulcers
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="ulcers" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="ulcers" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Bowel disorder such as Crohn's Disease, ulcerative colitis, or Irritable Bowel Syndrome
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="bowel_disorder" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="bowel_disorder" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Glaucoma
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="glaucoma" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="glaucoma" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Macular degeneration
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="macular_degeneration" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="macular_degeneration" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Osteoporosis, sometimes called low bone mineral density, or thin, brittle, or weak bones
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="osteoporosis" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="osteoporosis" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Back problems, excluding fibromyalgia and arthrtis
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="back_problems" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="back_problems" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Underactive thyroid gland (sometimes called hypothyroidism or myxedema) or overactive thyroid gland
+                    (sometimes called hyperthyroidism or Graves' disease)
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="thyroid_gland" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="thyroid_gland" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Kidney disease or kidney failure
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="kidney_disease" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="kidney_disease" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <legend>
+                    Other conditions (if yes, list conditions)
+                  </legend>
+                </td>
+                <td>
+                  <input type="radio" name="others" value="1" />
+                </td>
+                <td>
+                  <input type="radio" name="others" value="0" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input type="text" name="other_conditions" placeholder="List conditions" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </fieldset>
+      </div>
+
+      <div class="self_care_div" hidden>
+        <div class="health">
+          <fieldset class="self_related_health">
+            <legend>In general, would your patient say that their health is:</legend>
+            <label><input type="radio" name="health" value="2" required />Excellent</label>
+            <label><input type="radio" name="health" value="1" required />Very Good</label>
+            <label><input type="radio" name="health" value="1" required />Good</label>
+            <label><input type="radio" name="health" value="0" required />Fair</label>
+            <label><input type="radio" name="health" value="0" required />Poor</label>
+          </fieldset>
+        </div>
+
+        <div class="effort">
+          <fieldset class="everything_effort">
+            <legend>In a typical week, how often does your patient feel that everything they do is an effort?</legend>
+            <label><input type="radio" name="effort" value="0" />Rarely or never (Less than 1 day)</label>
+            <label><input type="radio" name="effort" value="1" />Some of the time (1-2 days)</label>
+            <label><input type="radio" name="effort" value="1" />Occasionally (3-4 days)</label>
+            <label><input type="radio" name="effort" value="2" />All of the time (5-7 days)</label>
+          </fieldset>
+        </div>
+
+        <div class="sports">
+          <fieldset class="sports_activity">
+            <legend>In a typical week, how often does your patient engage in moderate or strenuous sports or
+              recreational
+              activities (such as dancing, golf without a cart, softball, jogging, swimming, cycling, or other similar
+              activities)?</legend>
+            <label><input type="radio" name="sports" value="0" />Never</label>
+            <label><input type="radio" name="sports" value="0" />Seldom (1-2 days)</label>
+            <label><input type="radio" name="sports" value="1" />Sometimes (3-4 days)</label>
+            <label><input type="radio" name="sports" value="1" />Often (5-7 days)</label>
+          </fieldset>
+        </div>
+      </div>
+
+
+      <div class="actions">
+        <button type="button" id="backToDemo">◀ Previous</button>
+        <button type="button" id="calcScore" disabled>Calculate Score</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- SECTION 3 – RESULTS -->
+  <section id="resultsSection">
+    <h2>Assessment Result</h2>
+    <div id="resultCard"></div>
+
+    <div class="chronic_div_others">
+      <h2>Chronic Conditions</h2>
+      <fieldset class="chronic_conditions">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                Has a doctor ever told your patient that they have or had
+                chronic health conditions which are expected to last, or have
+                already lasted, 6 months or more?
+              </th>
+              <th>Yes</th>
+              <th>No</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <legend>
+                  Emphysema, chronic bronchitis, chronic obstructive pulmonary disease (COPD), or chronic changes in
+                  lungs due to smoking
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="emphysema" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="emphysema" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  High blood pressure or hypertension
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="bp" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="bp" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Heart disease (including congestive heart failure or CHF)
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="heart_disease" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="heart_disease" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Angina (or chest pain due to heart disease), heart attack, or myocardial infarction
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="angina" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="angina" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Cancer
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="cancer" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="cancer" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Memory problem
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="memory" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="memory" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Dementia or Alzheimer's disease
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="dementia" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="dementia" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Osteoarthritis in the knee, hip or hands
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="osteoarthritis" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="osteoarthritis" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Rheumatoid or other type of arthritis
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="rheumatoid" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="rheumatoid" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Peripheral vascular disease or poor circulation in your limbs
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="peripheral_vascular" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="peripheral_vascular" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Stroke or CVA (cerebrovascular accident)
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="stroke" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="stroke" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Mini-stroke or TIA (Transient Ischemic Attack)
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="mini_stroke" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="mini_stroke" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Parkinsonism or Parkinson's disease
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="parkinsons" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="parkinsons" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Intestinal or stomach ulcers
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="ulcers" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="ulcers" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Bowel disorder such as Crohn's Disease, ulcerative colitis, or Irritable Bowel Syndrome
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="bowel_disorder" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="bowel_disorder" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Glaucoma
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="glaucoma" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="glaucoma" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Macular degeneration
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="macular_degeneration" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="macular_degeneration" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Osteoporosis, sometimes called low bone mineral density, or thin, brittle, or weak bones
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="osteoporosis" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="osteoporosis" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Back problems, excluding fibromyalgia and arthrtis
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="back_problems" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="back_problems" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Underactive thyroid gland (sometimes called hypothyroidism or myxedema) or overactive thyroid gland
+                  (sometimes called hyperthyroidism or Graves' disease)
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="thyroid_gland" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="thyroid_gland" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Kidney disease or kidney failure
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="kidney_disease" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="kidney_disease" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <legend>
+                  Other conditions (if yes, list conditions)
+                </legend>
+              </td>
+              <td>
+                <input type="radio" name="others" value="1" />
+              </td>
+              <td>
+                <input type="radio" name="others" value="0" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="text" name="other_conditions" placeholder="List conditions" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </fieldset>
+    </div>
+
+    <div class="disposition">
+      <h2>ED Disposition & Orders</h2>
+      <fieldset class="full">
+        <legend>ED Disposition</legend>
+        <label><input type="radio" name="disposition" value="Discharge" />
+          Discharge</label>
+        <label><input type="radio" name="disposition" value="Ward" /> Ward</label>
+        <label><input type="radio" name="disposition" value="ICU" /> ICU</label>
+      </fieldset>
+      <fieldset class="full">
+        <legend>DNI / DNR Order Placed</legend>
+        <label><input type="radio" name="dnr_order" value="Yes" />
+          Yes</label>
+        <label><input type="radio" name="dnr_order" value="No" /> No</label>
+      </fieldset>
+    </div>
+
+    <div class="outcome">
+      <h2>Outcome</h2>
+      <fieldset class="full">
+        <legend>In-hospital Mortality</legend>
+        <label><input type="radio" name="mortality" value="Yes" />
+          Yes</label>
+        <label><input type="radio" name="mortality" value="No" /> No</label>
+        <label>Length of stay in hospital (Days): </label>
+        <input type="number" name="length_of_stay" />
+      </fieldset>
+
+      <div class="actions">
+        <button type="button" id="backToCfs">◀ Previous</button>
+        <button type="button" id="saveAssessment">💾 Save</button>
+        <button type="button" id="newAssessment">➕ New</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ASSESSMENT VIEW -->
+  <section id="viewSection">
+    <h2>Assessment Details</h2>
+    <div id="assessmentViewContent"></div>
+    <div class="actions">
+      <button type="button" id="backToSaved">◀ Back to Saved</button>
+      <button type="button" id="newAssessment">➕ New</button>
+    </div>
+  </section>
+
+  <!-- SAVED LIST -->
+  <section id="savedSection">
+    <h2>Saved Assessments</h2>
+    <div id="savedList"></div>
+    <div class="actions">
+      <button id="refreshList">⟳ Refresh</button>
+      <button id="exportData">📤 Export All Data</button>
+      <button type="button" id="newAssessment">➕ New</button>
+    </div>
+  </section>
+
+  <!-- Simple Alert Modal -->
+  <div id="alertModal" class="alert-overlay" style="display: none;">
+    <div class="alert-box">
+      <div class="alert-content">
+        <h3>⚠️ Confirm Action</h3>
+        <p id="alertText">Are you sure you want to start a new assessment?</p>
+      </div>
+      <div class="alert-buttons">
+        <button id="alertCancel" class="btn-cancel">Cancel</button>
+        <button id="alertConfirm" class="btn-confirm">Continue</button>
+      </div>
+      </div>
+    </div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator)
+      navigator.serviceWorker.register("sw.js");
+  </script>
+</body>
+
+</html>
