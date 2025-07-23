@@ -49,7 +49,7 @@ The Clinical Frailty Scale is a validated assessment tool used to measure frailt
 ## 🚀 Installation & Setup
 
 ### Access the App
-Visit the live application at: `https://noufanvp.github.io/Clinical-Fraility-Scale-Assessment`
+Visit the live application at: [`https://noufanvp.github.io/Clinical-Fraility-Scale-Assessment`](https://noufanvp.github.io/Clinical-Fraility-Scale-Assessment)
 
 ### Method 1: Install as PWA on Android
 1. **Open in Chrome Browser**:
